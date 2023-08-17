@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 
 import { postEmployeeDetails } from "../Utils/Api";
-import {message} from "antd"
-// import TagsInput from "react-tagsinput";
-// import "react-tagsinput/react-tagsinput.css";
+import { message } from "antd";
+
 const EmployeeForm = () => {
-  //   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [employeeId, setEmployeeId] = useState("");
   const [address, setAddress] = useState("");
   const [designation, setDesignation] = useState("");
-  const [ joiningDate, setJoiningDate] = useState("");
+  const [joiningDate, setJoiningDate] = useState("");
   const [gender, setGender] = useState("");
   const [experiences, setExperiences] = useState([
     { company: "", startYear: "", endYear: "", designation: "" },
@@ -27,11 +25,10 @@ const EmployeeForm = () => {
   const [genderError, setGenderError] = useState("");
   const [addressError, setAddressError] = useState("");
 
-
   const [experienceErrors, setExperienceErrors] = useState([
     { company: "", year: "", designation: "" },
   ]);
- 
+
   const validateForm = () => {
     let isValid = true;
 
@@ -46,8 +43,7 @@ const EmployeeForm = () => {
     if (mobile === "") {
       setMobileError("Please enter valid number.");
       isValid = false;
-    }
-    else {
+    } else {
       setMobileError("");
     }
     // validate embloyee id
@@ -121,15 +117,14 @@ const EmployeeForm = () => {
     });
     setExperienceErrors(updatedExperienceErrors);
 
-    
     return isValid;
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-console.log(nameError,mobileError,employeeIdError,designationError,joiningDateError,emailError,genderError,addressError);
+
     if (validateForm()) {
-      const data ={
+      const data = {
         name,
         mobile,
         email,
@@ -138,28 +133,30 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
         designation,
         joiningDate,
         gender,
-        experiences
-      }
-  
-     const res = await postEmployeeDetails(data)
-       if(res.success) {
-        message.success(res.message)
-        setName("");
-        setEmail("");
-        setMobile();
-        setEmployeeId();
-        setDesignation("");
-        setJoiningDate("");
-        setAddress("");
-        setGender("");
-        setExperiences([
-          { company: "", startYear: "", endYear: "", designation: "" },
-        ]);
-     
-       }else {
-        message.error(res.message)
-       }
+        experiences,
+      };
+      try {
+        const res = await postEmployeeDetails(data);
 
+        if (res.success) {
+          message.success(res.message);
+          setName("");
+          setEmail("");
+          setMobile("");
+          setEmployeeId("");
+          setDesignation("");
+          setJoiningDate("");
+          setAddress("");
+          setGender("");
+          setExperiences([
+            { company: "", startYear: "", endYear: "", designation: "" },
+          ]);
+        } else {
+          message.error(res.message);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -176,14 +173,11 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
     ]);
   };
 
-
-
   const handleRemoveExperience = (index) => {
     const updatedExp = [...experiences];
     updatedExp.splice(index, 1);
     setExperiences(updatedExp);
   };
-
 
   const handleOptionChange = (event) => {
     setGender(event.target.value);
@@ -191,30 +185,29 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
   return (
     <div className="  mt-5 mb-5 px-36">
       <div>
-        <h1 className="text-center font-medium">Employee Details</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="font-medium">
           <div className="flex w-full gap-4 ">
-            <div className="form-group w-full">
+            <div className="form-group w-full space-y-2">
               <label htmlFor="name">Name:</label>
               <input
                 type="text"
-                className="border w-full"
+                className="border w-full p-1"
                 id="name"
                 value={name}
+                placeholder="Enter Name"
                 onChange={(e) => setName(e.target.value)}
               />
-              {nameError && (
-                <span className="text-red-500">{nameError}</span>
-              )}
+              {nameError && <span className="text-red-500">{nameError}</span>}
             </div>
 
-            <div className="form-group w-full">
+            <div className="form-group w-full space-y-2 ">
               <label htmlFor="email">Mobile:</label>
               <input
                 type="number"
-                className="border w-full"
+                className="border w-full p-1"
                 id="email"
                 value={mobile}
+                placeholder="Enter Mobile Number"
                 onChange={(e) => setMobile(e.target.value)}
               />
               {mobileError && (
@@ -222,28 +215,28 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
               )}
             </div>
           </div>
-          <div className="flex w-full gap-4 ">
-            <div className="form-group w-full">
+          <div className="flex w-full gap-4 mt-3 ">
+            <div className="form-group w-full space-y-2">
               <label htmlFor="name">Email:</label>
               <input
                 type="email"
-                className="border w-full"
+                className="border w-full p-1"
                 id="name"
                 value={email}
+                placeholder="Enter Email"
                 onChange={(e) => setEmail(e.target.value)}
               />
-              {emailError && (
-                <span className="text-red-500">{emailError}</span>
-              )}
+              {emailError && <span className="text-red-500">{emailError}</span>}
             </div>
 
-            <div className="form-group w-full">
+            <div className="form-group w-full space-y-2">
               <label htmlFor="email">Employee ID:</label>
               <input
-                type="number"
-                className="border w-full"
+                type="text"
+                className="border w-full p-1"
                 id="email"
                 value={employeeId}
+                placeholder="Enter Employee ID"
                 onChange={(e) => setEmployeeId(e.target.value)}
               />
               {employeeIdError && (
@@ -251,14 +244,15 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
               )}
             </div>
           </div>
-          <div className="flex w-full gap-4 ">
-            <div className="form-group w-full">
+          <div className="flex w-full gap-4 mt-3">
+            <div className="form-group w-full space-y-2">
               <label htmlFor="name">Designation:</label>
               <input
                 type="text"
-                className="border w-full"
+                className="border w-full p-1"
                 id="name"
                 value={designation}
+                placeholder="Enter Designation"
                 onChange={(e) => setDesignation(e.target.value)}
               />
               {designationError && (
@@ -266,13 +260,15 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
               )}
             </div>
 
-            <div className="form-group w-full">
+            <div className="form-group w-full space-y-2">
               <label htmlFor="email">Joining date:</label>
               <input
                 type="date"
-                className="border w-full"
+                className="border w-full p-1"
                 id="email"
                 value={joiningDate}
+                min={new Date()}
+                placeholder="Enter joining date"
                 onChange={(e) => setJoiningDate(e.target.value)}
               />
               {joiningDateError && (
@@ -280,10 +276,9 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
               )}
             </div>
           </div>
-      
 
           {/*  */}
-          <label className=" text-gray-700 font-medium mb-2 " htmlFor="sex">
+          <label className=" text-gray-700 font-medium my-3 " htmlFor="sex">
             Gender
           </label>
           <div className="flex  flex-wrap  bg-white">
@@ -297,7 +292,7 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
                 onChange={handleOptionChange}
               />
               <label
-                className="inline-block  text-gray-600 font-medium"
+                className="inline-block  text-gray-600 font-medium ml-1"
                 htmlFor="male"
               >
                 Male
@@ -313,7 +308,7 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
                 onChange={handleOptionChange}
               />
               <label
-                className="inline-block  text-gray-600 font-medium"
+                className="inline-block  text-gray-600 font-medium ml-1"
                 htmlFor="feMale"
               >
                 Female
@@ -329,7 +324,7 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
                 onChange={handleOptionChange}
               />
               <label
-                className="inline-block  text-gray-600 font-medium"
+                className="inline-block  text-gray-600 font-medium ml-1"
                 htmlFor="others"
               >
                 Others
@@ -341,7 +336,7 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
           )}
           {/*  */}
 
-          <div className="form-group">
+          <div className="form-group space-y-2">
             <label htmlFor="address">Address:</label>
             <textarea
               className="border w-full"
@@ -354,14 +349,15 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
             )}
           </div>
 
-          <h4>Experiences:</h4>
+          <h4 className="mt-3">Experiences:</h4>
           {experiences.map((exp, index) => (
             <div key={index} className="flex my-2 ">
-              <div className="flex flex-col mx-2">
+              <div className="flex flex-col w-full mx-2">
                 <label htmlFor={`company-${index}`}>Company:</label>
                 <input
                   type="text"
-                  className="border"
+                  className="border p-2"
+                  placeholder="Company Name"
                   id={`company-${index}`}
                   value={exp.company}
                   onChange={(e) => {
@@ -371,16 +367,15 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
                   }}
                 />
                 {experienceErrors.map((error) => (
-                  <span className="text-red-500">
-                    {error.company}
-                  </span>
+                  <span className="text-red-500">{error.company}</span>
                 ))}
               </div>
-              <div className="flex flex-col mx-2">
+              <div className="flex flex-col  w-full mx-2">
                 <label htmlFor={`designation-${index}`}>Designation:</label>
                 <input
                   type="text"
-                  className="border"
+                  className="border p-2"
+                  placeholder="Designation"
                   id={`designation-${index}`}
                   value={exp.designation}
                   onChange={(e) => {
@@ -390,17 +385,16 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
                   }}
                 />
                 {experienceErrors.map((error) => (
-                  <span className="text-red-500">
-                    {error.designation}
-                  </span>
+                  <span className="text-red-500">{error.designation}</span>
                 ))}
               </div>
 
-              <div className="flex flex-col mx-2">
-                <label htmlFor={`startYear-${index}`}>Start Year:</label>
+              <div className="flex flex-col  w-full mx-2">
+                <label htmlFor={`startYear-${index}`}>Start Date:</label>
                 <input
-                  type="text"
-                  className="border"
+                  type="date"
+                  className="border p-2"
+                  placeholder="Start Date"
                   id={`startYear-${index}`}
                   value={exp.startYear}
                   onChange={(e) => {
@@ -410,17 +404,16 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
                   }}
                 />
                 {experienceErrors.map((error) => (
-                  <span className="text-red-500">
-                    {error.startYear}
-                  </span>
+                  <span className="text-red-500">{error.startYear}</span>
                 ))}
               </div>
 
-              <div className="flex flex-col mx-2">
-                <label htmlFor={`endYear-${index}`}>End Year:</label>
+              <div className="flex flex-col  w-full mx-2">
+                <label htmlFor={`endYear-${index}`}>End Date:</label>
                 <input
-                  type="text"
-                  className="border"
+                  type="date"
+                  className="border p-2"
+                  placeholder="End Date"
                   id={`endYear-${index}`}
                   value={exp.endYear}
                   onChange={(e) => {
@@ -428,21 +421,17 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
                     updatedExp[index].endYear = e.target.value;
                     setExperiences(updatedExp);
                   }}
-                //   disabled={exp.currently}
                 />
                 {experienceErrors.map((error) => (
-                  <span className="text-red-500">
-                    {error.endYear}
-                  </span>
+                  <span className="text-red-500">{error.endYear}</span>
                 ))}
               </div>
-
 
               {index > 0 && (
                 <div className="form-group  " style={{ marginTop: 30 }}>
                   <button
                     type="button"
-                    className="bg-red-400"
+                    className="bg-red-400 p-1 rounded-lg hover:border-2 border-black hover:bg-white"
                     onClick={() => handleRemoveExperience(index)}
                   >
                     Remove
@@ -453,15 +442,14 @@ console.log(nameError,mobileError,employeeIdError,designationError,joiningDateEr
           ))}
           <button
             type="button"
-            className="bg-slate-400 p-1"
+            className="bg-slate-300 rounded-lg p-1 hover:border-2 border-black hover:bg-white"
             onClick={handleAddExperience}
           >
             Add More
           </button>
 
-
           <div className=" flex justify-center items-center">
-            <button type="submit" className="bg-slate-400 p-2 mt-5 ">
+            <button type="submit" className="bg-slate-400 p-2 px-10 hover:border-2 border-black hover:bg-white mt-5 rounded-lg">
               Submit
             </button>
           </div>
