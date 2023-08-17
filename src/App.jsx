@@ -1,17 +1,12 @@
-
-import './App.css'
-import EmployeeForm from './Components/EmployeeForm'
-import EmployeeFormS from './Components/EmployeeFormS'
+import "./App.css";
+import EmployeeForm from "./Components/EmployeeForm";
 
 function App() {
-  
-
   return (
     <>
-  <EmployeeForm/>
-  {/* <EmployeeFormS/> */}
+      <EmployeeForm />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
